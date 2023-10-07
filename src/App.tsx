@@ -2,10 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import './App.css'
 
 function App() {
-  const [passwordLength, setPasswordLength] = useState(6);
-  const [addNumber, setAddNumber] = useState(false);
-  const [addCharacter, setAddCharacter] = useState(false);
-  const [password, setPassword] = useState("");
+  const [passwordLength, setPasswordLength] = useState<number>(6);
+  const [addNumber, setAddNumber] = useState<boolean>(false);
+  const [addCharacter, setAddCharacter] = useState<boolean>(false);
+  const [password, setPassword] = useState<string>("");
 
   // useRef hook
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -31,8 +31,11 @@ function App() {
   }, [passwordLength, addNumber, addCharacter, setPassword]);
 
   const copyPasswordToClipboard = useCallback(() => {
-    passwordRef.current?.select();
-    window.navigator.clipboard.writeText(password)
+    if (passwordRef.current) {
+      passwordRef.current.select();
+      passwordRef.current.setSelectionRange(0, 30)
+      window.navigator.clipboard.writeText(password)
+    }
   }, [password])
 
   useEffect(() => {
@@ -66,8 +69,8 @@ function App() {
             <input 
               type="range"
               min={6}
-              max={100}
-              value={length}
+              max={30}
+              value={passwordLength}
               className='cursor-pointer'
               onChange={(e) => setPasswordLength(Number(e.target.value))}
             />
